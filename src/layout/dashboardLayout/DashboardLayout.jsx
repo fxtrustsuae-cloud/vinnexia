@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { Box, CssBaseline, Typography, useMediaQuery } from "@mui/material";
+import { Box, CssBaseline, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { Outlet, useLocation, matchPath, useOutletContext } from "react-router-dom";
-import Footer from '../footer/Footer';
 import { useSelector, useDispatch } from "react-redux";
 import { setThemeMode } from "../../globalState/userPanelState/themeMode/themeModeSlice";
 import Header from "../header/Header";
@@ -11,7 +10,6 @@ import Loader from "../../components/Loader"
 import { getCustomTheme } from "../../theme";
 import AppGlobalStyles from "../../AppGlobalStyles";
 import SideBar from "../sideBar/SideBar";
-import LatestNewsCarosul from "../../components/latest/LatestNewsCarosul";
 import MarqueeComponent from "../../components/MarqueeComponent";
 import { useGetNotificationQuery } from "../../globalState/otherContentState/otherContentStateApis";
 
@@ -127,7 +125,6 @@ function DashboardLayout() {
                 >
                     {notificationStatus && <MarqueeComponent message={notificationData?.data?.message} />}
                     {(!shouldHideSideBar && !isLoading && !isKycVerified) && <CompleteProfile userData={data} userDataLoading={isLoading} />}
-                    {location.pathname == "/client/myAccount" && <LatestNewsCarosul isKycVerified={isKycVerified} />}
                     <Box sx={{ 
                         flex: 1, 
                         pt: (isKycVerified && location.pathname !== "/client/IBProgramme/IBRequest") ? "30px" : 0,
@@ -135,7 +132,6 @@ function DashboardLayout() {
                     }}>
                         {(isLoading && !data) ? <Loader /> : <Outlet context={{ isLoading, data }} />}
                     </Box>
-                    {/* <Footer /> */}
                 </Box>
             </Box>
         </ThemeProvider>

@@ -88,6 +88,7 @@ function Auth() {
             animation: `${gradientAnimation} 15s ease infinite`,
             position: 'relative',
             overflow: 'hidden',
+            marginTop:"1.5rem"
         }}>
             {/* Animated background elements */}
             <Box sx={{

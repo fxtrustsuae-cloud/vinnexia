@@ -90,7 +90,7 @@ function WalletCard() {
               textShadow: "0 1px 2px rgba(0,0,0,0.5)",
             }}
           >
-            Flexy
+            Vinnexia
             <Box
               component="span"
               sx={{
@@ -101,7 +101,7 @@ function WalletCard() {
                 backgroundClip: "text",
               }}
             >
-              Markets
+              Capital
             </Box>
           </Typography>
 

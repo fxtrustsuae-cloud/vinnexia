@@ -8,11 +8,11 @@ import {
   Alert,
   IconButton,
   CircularProgress,
-  useTheme,
   useMediaQuery,
   Chip,
   Skeleton,
-  Fade
+  Fade,
+  alpha
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -30,9 +30,19 @@ import { useGroupListQuery } from "../../../../../globalState/groupState/groupSt
 import { mergePlansWithGroups } from "../../../../../utils/mergePlansWithGroups";
 import { useGetUserDataQuery } from "../../../../../globalState/userState/userStateApis";
 
+// Color palette - DARK THEME
+const COLORS = {
+  accentGold: "#7E6233",
+  whiteMain: "#FEFEFE",
+  blackDark: "#11191E",
+  greyLight: "#CACDCC",
+  greyMedium: "#B3B6B6",
+  greyDark: "#848F94",
+  darkBg: "#1a1f24",
+};
+
 function AccountTypeToggle({ groupType, onChange }) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   return (
     <Box
@@ -41,9 +51,9 @@ function AccountTypeToggle({ groupType, onChange }) {
         gap: 0.5,
         p: 0.5,
         border: "1px solid",
-        borderColor: "divider",
+        borderColor: alpha(COLORS.greyDark, 0.3),
         borderRadius: 2,
-        bgcolor: "background.paper",
+        bgcolor: alpha("#2a2f34", 0.9),
         width: 'fit-content',
       }}
     >
@@ -57,21 +67,17 @@ function AccountTypeToggle({ groupType, onChange }) {
           px: 2,
           py: 1,
           border: "1px solid",
-          borderColor: groupType === "REAL" ? "primary.main" : "transparent",
+          borderColor: groupType === "REAL" ? COLORS.accentGold : "transparent",
           borderRadius: 1.5,
           bgcolor: groupType === "REAL" 
-            ? theme.palette.mode === 'dark' 
-              ? "rgba(25, 118, 210, 0.2)" 
-              : "rgba(25, 118, 210, 0.1)"
+            ? alpha(COLORS.accentGold, 0.2)
             : "transparent",
-          color: groupType === "REAL" ? "primary.main" : "text.secondary",
+          color: groupType === "REAL" ? COLORS.accentGold : COLORS.greyMedium,
           cursor: "pointer",
           transition: "all 0.2s ease",
           "&:hover": {
-            borderColor: groupType === "REAL" ? "primary.main" : "divider",
-            bgcolor: theme.palette.mode === 'dark' 
-              ? "rgba(255, 255, 255, 0.05)" 
-              : "rgba(0, 0, 0, 0.02)",
+            borderColor: groupType === "REAL" ? COLORS.accentGold : alpha(COLORS.greyDark, 0.3),
+            bgcolor: alpha(COLORS.greyDark, 0.1),
           },
           fontWeight: groupType === "REAL" ? 600 : 400,
           minWidth: 80,
@@ -95,21 +101,17 @@ function AccountTypeToggle({ groupType, onChange }) {
           px: 2,
           py: 1,
           border: "1px solid",
-          borderColor: groupType === "DEMO" ? "primary.main" : "transparent",
+          borderColor: groupType === "DEMO" ? COLORS.accentGold : "transparent",
           borderRadius: 1.5,
           bgcolor: groupType === "DEMO" 
-            ? theme.palette.mode === 'dark' 
-              ? "rgba(25, 118, 210, 0.2)" 
-              : "rgba(25, 118, 210, 0.1)"
+            ? alpha(COLORS.accentGold, 0.2)
             : "transparent",
-          color: groupType === "DEMO" ? "primary.main" : "text.secondary",
+          color: groupType === "DEMO" ? COLORS.accentGold : COLORS.greyMedium,
           cursor: "pointer",
           transition: "all 0.2s ease",
           "&:hover": {
-            borderColor: groupType === "DEMO" ? "primary.main" : "divider",
-            bgcolor: theme.palette.mode === 'dark' 
-              ? "rgba(255, 255, 255, 0.05)" 
-              : "rgba(0, 0, 0, 0.02)",
+            borderColor: groupType === "DEMO" ? COLORS.accentGold : alpha(COLORS.greyDark, 0.3),
+            bgcolor: alpha(COLORS.greyDark, 0.1),
           },
           fontWeight: groupType === "DEMO" ? 600 : 400,
           minWidth: 80,
@@ -127,7 +129,10 @@ function AccountTypeToggle({ groupType, onChange }) {
 }
 
 function VerificationBanner({ groupType, verificationRequired, userDataLoading }) {
-  const theme = useTheme();
+  const successBg = alpha("#2e7d32", 0.15);
+  const successBorder = alpha("#2e7d32", 0.3);
+  const warningBg = alpha("#ed6c02", 0.15);
+  const warningBorder = alpha("#ed6c02", 0.3);
 
   if (userDataLoading) {
     return (
@@ -136,7 +141,7 @@ function VerificationBanner({ groupType, verificationRequired, userDataLoading }
         height={60} 
         sx={{ 
           borderRadius: 2,
-          bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+          bgcolor: alpha(COLORS.greyDark, 0.3)
         }} 
       />
     );
@@ -149,22 +154,18 @@ function VerificationBanner({ groupType, verificationRequired, userDataLoading }
       sx={{
         borderRadius: 2,
         border: "1px solid",
-        borderColor: verificationRequired ? "success.main" : "warning.main",
+        borderColor: verificationRequired ? successBorder : warningBorder,
         bgcolor: verificationRequired 
-          ? theme.palette.mode === 'dark' 
-            ? "rgba(56, 142, 60, 0.15)" 
-            : "rgba(56, 142, 60, 0.08)"
-          : theme.palette.mode === 'dark'
-            ? "rgba(245, 124, 0, 0.15)"
-            : "rgba(245, 124, 0, 0.08)",
-        color: verificationRequired ? "success.main" : "warning.main",
+          ? successBg
+          : warningBg,
+        color: verificationRequired ? "#4caf50" : "#ff9800",
         "& .MuiAlert-icon": {
-          color: verificationRequired ? "success.main" : "warning.main"
+          color: verificationRequired ? "#4caf50" : "#ff9800"
         },
         transition: "all 0.3s ease",
         "&:hover": {
           transform: "translateY(-1px)",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
         }
       }}
     >
@@ -182,7 +183,7 @@ function VerificationBanner({ groupType, verificationRequired, userDataLoading }
           to="/client/verification" 
           variant="caption"
           sx={{
-            color: "primary.main",
+            color: COLORS.accentGold,
             textDecoration: "none",
             fontWeight: 500,
             display: "inline-block",
@@ -200,7 +201,6 @@ function VerificationBanner({ groupType, verificationRequired, userDataLoading }
 }
 
 function PlanCountSkeleton() {
-  const theme = useTheme();
   return (
     <Skeleton 
       variant="rounded" 
@@ -208,7 +208,7 @@ function PlanCountSkeleton() {
       height={32}
       sx={{
         borderRadius: 16,
-        bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+        bgcolor: alpha(COLORS.greyDark, 0.3)
       }}
     />
   );
@@ -216,9 +216,18 @@ function PlanCountSkeleton() {
 
 function OpenAccountPlanSection() {
   const [groupType, setGroupType] = useState("REAL");
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery('(max-width:600px)');
   const { token } = useSelector((state) => state.auth);
+
+  // DARK THEME VARIABLES
+  const pageBgColor = COLORS.darkBg;
+  const cardBgColor = alpha("#2a2f34", 0.9);
+  const borderColor = alpha(COLORS.greyDark, 0.3);
+  const textPrimary = COLORS.whiteMain;
+  const textSecondary = COLORS.greyMedium;
+  const infoCardBg = alpha("#1976d2", 0.15);
+  const infoCardBorder = alpha("#1976d2", 0.3);
+  const primaryHoverBg = alpha(COLORS.accentGold, 0.2);
 
   // Fetch group list
   const { data, isFetching, isError } = useGroupListQuery({
@@ -256,7 +265,11 @@ function OpenAccountPlanSection() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: { xs: 3, sm: 4 }, minHeight: "100vh" }}>
+    <Container maxWidth="xl" sx={{ 
+      py: { xs: 3, sm: 4 }, 
+      minHeight: "100vh",
+      backgroundColor: pageBgColor 
+    }}>
       {/* Header */}
       <Fade in timeout={300}>
         <Stack 
@@ -271,14 +284,14 @@ function OpenAccountPlanSection() {
               component={Link}
               to="/client/myAccount"
               sx={{
-                color: "text.primary",
+                color: textPrimary,
                 border: "1px solid",
-                borderColor: "divider",
-                bgcolor: "background.paper",
+                borderColor: borderColor,
+                bgcolor: cardBgColor,
                 "&:hover": {
-                  borderColor: "primary.main",
-                  bgcolor: "primary.light",
-                  color: "primary.main"
+                  borderColor: COLORS.accentGold,
+                  bgcolor: primaryHoverBg,
+                  color: COLORS.accentGold
                 },
                 transition: "all 0.3s ease"
               }}
@@ -291,18 +304,13 @@ function OpenAccountPlanSection() {
                 variant="h4" 
                 fontWeight={800}
                 sx={{ 
-                  background: theme.palette.mode === 'dark'
-                    ? "linear-gradient(45deg, #fff 30%, #90caf9 90%)"
-                    : "linear-gradient(45deg, #1976d2 30%, #21CBF3 90%)",
-                  backgroundClip: "text",
-                  textFillColor: "transparent",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent"
+                  color: textPrimary,
+                  mb: 0.5
                 }}
               >
                 Open New Account
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant="body1" color={textSecondary}>
                 Select your preferred trading account type
               </Typography>
             </Box>
@@ -324,16 +332,18 @@ function OpenAccountPlanSection() {
               </Box>
             }
             label="MetaTrader 5"
-            color="primary"
-            variant="outlined"
             sx={{
               px: 2,
               py: 1.5,
               fontSize: "0.9rem",
               fontWeight: 600,
               borderWidth: 2,
+              backgroundColor: alpha(COLORS.accentGold, 0.15),
+              borderColor: alpha(COLORS.accentGold, 0.3),
+              color: COLORS.accentGold,
               "& .MuiChip-icon": {
-                ml: 0
+                ml: 0,
+                color: COLORS.accentGold
               }
             }}
           />
@@ -343,7 +353,7 @@ function OpenAccountPlanSection() {
       {/* Account Type Selection - Compact */}
       <Fade in timeout={500}>
         <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
-          <Typography variant="body1" fontWeight={600} color="text.primary">
+          <Typography variant="body1" fontWeight={600} color={textPrimary}>
             Account Type:
           </Typography>
           <AccountTypeToggle 
@@ -371,14 +381,13 @@ function OpenAccountPlanSection() {
         sx={{
           p: { xs: 2, sm: 3 },
           border: "1px solid",
-          borderColor: "divider",
+          borderColor: borderColor,
           borderRadius: 3,
-          bgcolor: "background.paper",
+          bgcolor: cardBgColor,
           transition: "all 0.3s ease",
+          boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
           "&:hover": {
-            boxShadow: theme.palette.mode === 'dark' 
-              ? "0 8px 32px rgba(0, 0, 0, 0.3)"
-              : "0 8px 32px rgba(0, 0, 0, 0.08)"
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)"
           }
         }}
       >
@@ -393,7 +402,7 @@ function OpenAccountPlanSection() {
             variant="h5" 
             fontWeight={700}
             sx={{ 
-              color: "text.primary",
+              color: textPrimary,
               display: "flex",
               alignItems: "center",
               gap: 1
@@ -404,10 +413,12 @@ function OpenAccountPlanSection() {
               <Chip 
                 label={`${mergedPlans.length} ${mergedPlans.length === 1 ? 'Plan' : 'Plans'}`}
                 size="small"
-                color="primary"
                 sx={{ 
                   ml: 1,
-                  fontWeight: 600 
+                  fontWeight: 600,
+                  backgroundColor: alpha(COLORS.accentGold, 0.15),
+                  borderColor: alpha(COLORS.accentGold, 0.3),
+                  color: COLORS.accentGold,
                 }}
               />
             )}
@@ -422,11 +433,11 @@ function OpenAccountPlanSection() {
               size={60} 
               thickness={4}
               sx={{ 
-                color: "primary.main",
+                color: COLORS.accentGold,
                 mb: 2
               }} 
             />
-            <Typography color="text.secondary">
+            <Typography color={textSecondary}>
               Loading available plans...
             </Typography>
           </Box>
@@ -437,12 +448,12 @@ function OpenAccountPlanSection() {
             justifyContent="center" 
             sx={{ py: 8, textAlign: "center" }}
           >
-            <ErrorIcon sx={{ fontSize: 80, color: theme.palette.error.main }} />
+            <ErrorIcon sx={{ fontSize: 80, color: "#f44336" }} />
             <Box>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
+              <Typography variant="h6" fontWeight="bold" gutterBottom color={textPrimary}>
                 Failed to Load Plans
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color={textSecondary}>
                 Unable to load trading plans. Please check your connection and try again.
               </Typography>
             </Box>
@@ -492,13 +503,13 @@ function OpenAccountPlanSection() {
             <Icon 
               icon="fluent:collections-empty-24-regular" 
               width="120px" 
-              color={theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.2)"}
+              color={alpha(COLORS.greyMedium, 0.5)}
             />
             <Box>
-              <Typography variant="h6" fontWeight="bold" gutterBottom>
+              <Typography variant="h6" fontWeight="bold" gutterBottom color={textPrimary}>
                 No Plans Found
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 400, mx: "auto" }}>
+              <Typography variant="body2" color={textSecondary} sx={{ maxWidth: 400, mx: "auto" }}>
                 {groupType === "REAL"
                   ? "There are currently no real trading plans available. Please check back later or contact support for assistance."
                   : "No demo account plans are available at the moment. Try switching to real accounts or check back later."}
@@ -517,17 +528,16 @@ function OpenAccountPlanSection() {
             mt: 4,
             borderRadius: 2,
             border: "1px solid",
-            borderColor: "info.main",
-            bgcolor: theme.palette.mode === 'dark'
-              ? "rgba(2, 136, 209, 0.15)"
-              : "rgba(2, 136, 209, 0.08)",
+            borderColor: infoCardBorder,
+            bgcolor: infoCardBg,
             "& .MuiAlert-icon": {
-              color: "info.main"
+              color: "#42a5f5"
             },
+            color: "#42a5f5",
             transition: "all 0.3s ease",
             "&:hover": {
               transform: "translateY(-2px)",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)"
+              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.4)"
             }
           }}
         >
@@ -537,7 +547,7 @@ function OpenAccountPlanSection() {
               component={Link}
               to="/contract-specifications"
               sx={{
-                color: "primary.main",
+                color: COLORS.accentGold,
                 textDecoration: "none",
                 fontWeight: 600,
                 display: "inline",

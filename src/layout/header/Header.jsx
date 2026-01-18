@@ -34,7 +34,7 @@ const COLORS = {
   greyLight: "#CACDCC",
   greyMedium: "#B3B6B6",
   greyDark: "#848F94",
-  darkBg: "#1a1f24", // Added for card backgrounds
+  darkBg: "#1a1f24", 
 };
 
 function Header({ sidebarOpen, toggleSidebar }) {
